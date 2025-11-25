@@ -7,11 +7,15 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.Color
 import com.example.indivassignment6q6.ui.theme.IndivAssignment6Q6Theme
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.Polyline
+import com.google.maps.android.compose.rememberCameraPositionState
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,10 +24,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             IndivAssignment6Q6Theme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    MapScreen(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
@@ -31,17 +32,29 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+fun MapScreen(modifier: Modifier = Modifier) {
+    val startPoint = LatLng(40.7688, -73.9712) // Near Central Park Zoo
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(startPoint, 14f)
+    }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    IndivAssignment6Q6Theme {
-        Greeting("Android")
+    // Sample coordinates for a hiking trail
+    val hikingTrail = listOf(
+        LatLng(40.7688, -73.9712),
+        LatLng(40.7710, -73.9700),
+        LatLng(40.7730, -73.9680),
+        LatLng(40.7750, -73.9660),
+        LatLng(40.7770, -73.9640)
+    )
+
+    GoogleMap(
+        modifier = modifier.fillMaxSize(),
+        cameraPositionState = cameraPositionState
+    ) {
+        Polyline(
+            points = hikingTrail,
+            color = Color.Red,
+            width = 15f
+        )
     }
 }
