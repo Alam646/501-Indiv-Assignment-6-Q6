@@ -47,6 +47,9 @@ fun MapScreen(modifier: Modifier = Modifier) {
     var polygonColor by remember { mutableStateOf(Color.Green) }
     var polygonWidth by remember { mutableFloatStateOf(5f) }
 
+    // State for click information
+    var selectedInfo by remember { mutableStateOf<String?>(null) }
+
     // Sample coordinates for a hiking trail
     val hikingTrail = listOf(
         LatLng(40.7688, -73.9712),
@@ -64,6 +67,19 @@ fun MapScreen(modifier: Modifier = Modifier) {
         LatLng(40.7680, -73.9630)
     )
 
+    if (selectedInfo != null) {
+        AlertDialog(
+            onDismissRequest = { selectedInfo = null },
+            title = { Text("Information") },
+            text = { Text(selectedInfo!!) },
+            confirmButton = {
+                TextButton(onClick = { selectedInfo = null }) {
+                    Text("Close")
+                }
+            }
+        )
+    }
+
     Column(modifier = modifier.fillMaxSize()) {
         Box(modifier = Modifier.weight(1f)) {
             GoogleMap(
@@ -73,14 +89,22 @@ fun MapScreen(modifier: Modifier = Modifier) {
                 Polyline(
                     points = hikingTrail,
                     color = polylineColor,
-                    width = polylineWidth
+                    width = polylineWidth,
+                    clickable = true,
+                    onClick = {
+                        selectedInfo = "Hiking Trail: A scenic 2-mile walk through the city."
+                    }
                 )
 
                 Polygon(
                     points = parkArea,
                     fillColor = polygonColor.copy(alpha = 0.3f),
                     strokeColor = polygonColor,
-                    strokeWidth = polygonWidth
+                    strokeWidth = polygonWidth,
+                    clickable = true,
+                    onClick = {
+                        selectedInfo = "Central Park Area: A large public park in New York City."
+                    }
                 )
             }
         }
