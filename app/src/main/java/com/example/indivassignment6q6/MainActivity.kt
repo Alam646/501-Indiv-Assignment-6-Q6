@@ -14,6 +14,7 @@ import com.example.indivassignment6q6.ui.theme.IndivAssignment6Q6Theme
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.Polygon
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 
@@ -47,6 +48,14 @@ fun MapScreen(modifier: Modifier = Modifier) {
         LatLng(40.7770, -73.9640)
     )
 
+    // Sample coordinates for a park area (Polygon)
+    val parkArea = listOf(
+        LatLng(40.7680, -73.9720),
+        LatLng(40.7780, -73.9720),
+        LatLng(40.7780, -73.9630),
+        LatLng(40.7680, -73.9630)
+    )
+
     GoogleMap(
         modifier = modifier.fillMaxSize(),
         cameraPositionState = cameraPositionState
@@ -55,6 +64,13 @@ fun MapScreen(modifier: Modifier = Modifier) {
             points = hikingTrail,
             color = Color.Red,
             width = 15f
+        )
+
+        Polygon(
+            points = parkArea,
+            fillColor = Color.Green.copy(alpha = 0.3f),
+            strokeColor = Color.Green,
+            strokeWidth = 5f
         )
     }
 }
